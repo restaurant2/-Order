@@ -28,14 +28,156 @@
     .langs{display:grid;grid-template-columns:1fr 1fr;gap:10px}
     .btn-lang{padding:12px;border:2px solid var(--accent-2);border-radius:14px;background:transparent;color:#fff;font-weight:800;cursor:pointer;}
     .hours{display:grid;grid-template-columns:1fr 1fr;gap:4px 40px;margin-top:20px}
-  </style>
+  
+.map-small{padding:6px 10px;font-size:12px;background:#00b7ff;color:#001018;}
+.cart-small{padding:6px 10px;font-size:12px;background:#ff8a00;color:#000;}
+
+    /* CART MODAL (LUXURY) */
+    .cart-overlay{
+      position:fixed;
+      inset:0;
+      background:rgba(0,0,0,.7);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      z-index:120;
+      opacity:0;
+      transition:opacity .35s ease;
+    }
+    .cart-overlay.show{
+      display:flex;
+      opacity:1;
+    }
+    .cart-dialog{
+      background:linear-gradient(145deg,#1c1f26,#0f1115);
+      padding:26px;
+      border-radius:26px;
+      box-shadow:
+        0 0 35px rgba(0,183,255,.25),
+        0 0 60px rgba(255,138,0,.18);
+      width:min(600px,90vw);
+      border:1px solid rgba(255,255,255,.07);
+    }
+    .cart-dialog h3{
+      margin-top:0;
+      margin-bottom:10px;
+      font-weight:900;
+      font-size:20px;
+    }
+    .cart-items{
+      max-height:260px;
+      overflow-y:auto;
+      margin-bottom:12px;
+    }
+    .cart-row{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      padding:8px 0;
+      border-bottom:1px solid rgba(255,255,255,.1);
+      font-size:14px;
+    }
+    .cart-row-main{
+      display:flex;
+      flex-direction:column;
+      gap:4px;
+    }
+    .cart-row-qty{
+      display:flex;
+      align-items:center;
+      gap:6px;
+      font-size:13px;
+    }
+    .qty-btn{
+      background:#ff8a00;
+      border:none;
+      padding:3px 9px;
+      border-radius:999px;
+      font-weight:800;
+      cursor:pointer;
+    }
+    .qty-val{
+      min-width:20px;
+      text-align:center;
+    }
+    .cart-total{
+      margin-top:8px;
+      font-weight:900;
+      display:flex;
+      justify-content:space-between;
+      font-size:16px;
+    }
+    .cart-input{
+      width:100%;
+      padding:9px 10px;
+      border-radius:10px;
+      border:1px solid rgba(255,255,255,.25);
+      background:rgba(0,0,0,.35);
+      color:#fff;
+      margin-top:6px;
+      font-size:14px;
+    }
+    .cart-input::placeholder{color:#888;}
+    .cart-actions{
+      display:flex;
+      gap:10px;
+      margin-top:16px;
+      flex-wrap:wrap;
+    }
+    .btn-primary{
+      flex:1;
+      background:linear-gradient(135deg,#FFD700,#FFB300);
+      color:#000;
+      font-weight:900;
+      border:none;
+      border-radius:16px;
+      padding:10px 16px;
+      cursor:pointer;
+      font-size:15px;
+      text-align:center;
+      box-shadow:0 0 18px rgba(255,215,0,.4);
+      transition:.2s;
+    }
+    .btn-primary:hover{
+      transform:translateY(-2px);
+      box-shadow:0 0 24px rgba(255,215,0,.7);
+    }
+    .btn-secondary{
+      background:transparent;
+      border:1px solid rgba(255,255,255,.35);
+      color:#fff;
+      border-radius:16px;
+      padding:9px 16px;
+      cursor:pointer;
+      font-size:14px;
+    }
+    #successMsg{
+      position:fixed;
+      top:20px;
+      left:50%;
+      transform:translateX(-50%) translateY(-30px);
+      background:linear-gradient(135deg,#FFD700,#FFB300);
+      padding:18px 34px;
+      border-radius:22px;
+      color:#000;
+      font-weight:900;
+      font-size:18px;
+      box-shadow:0 0 25px rgba(255,215,0,.6);
+      opacity:0;
+      pointer-events:none;
+      transition:opacity .7s ease, transform .7s ease;
+      z-index:200;
+    }
+
+</style>
 </head>
 <body>
 <header>
   <div class="container bar">
     <div class="title">חומוס גרגירים</div>
     <div style="display:flex;gap:10px;">
-      <a class="pill" href="https://maps.app.goo.gl/tNyCG6kLzahix4iu8" target="_blank">פתיחת המיקום במפה</a>
+      <a class="pill map-small" href="https://maps.app.goo.gl/tNyCG6kLzahix4iu8">מפה</a>
+      <button class="pill cart-small" id="cartBtn">שאלות</button>
       <button class="pill lang" id="btnLang">🌐</button>
     </div>
   </div>
@@ -130,68 +272,325 @@ document.querySelectorAll('.btn-lang').forEach(btn=>btn.addEventListener('click'
 const saved=localStorage.getItem('menu-lang')||'he';renderAll(saved);
 </script>
 
-<!-- CART FLOATING BUTTON -->
-<button id="cartBtn" style="position:fixed;top:20px;left:20px;background:#ff8a00;color:#fff;padding:12px 16px;border-radius:16px;font-weight:800;cursor:pointer;z-index:999;">🛒 السلة</button>
 
-<!-- CART PANEL -->
-<div id="cartPanel" style="position:fixed;inset:0;background:rgba(0,0,0,.55);display:none;align-items:center;justify-content:center;z-index:1000;">
-  <div id="cartBox" style="background:#181b22;padding:20px;border-radius:20px;box-shadow:0 20px 50px rgba(0,0,0,.45);width:min(500px,90vw);color:white;">
-    <h3>🛒 السلة</h3>
-    <div id="cartItems"></div>
-<div id="customerInfo" style="margin-top:15px;display:flex;flex-direction:column;gap:10px;">
-  <input id="custName" placeholder="Name" style="padding:10px;border:2px solid #ff8a00;border-radius:10px;background:#0f1115;color:#fff;">
-  <input id="custPhone" placeholder="Phone" style="padding:10px;border:2px solid #ff8a00;border-radius:10px;background:#0f1115;color:#fff;">
-  <input id="custAddr" placeholder="Address" style="padding:10px;border:2px solid #ff8a00;border-radius:10px;background:#0f1115;color:#fff;">
-</div>
 
-    <div id="checkoutBtn" style="margin-top:20px;background:#00b7ff;color:#001018;padding:12px 16px;border-radius:14px;font-weight:800;text-align:center;cursor:pointer;">اتمام الطلب</div>
+<!-- CART MODAL -->
+<div id="cartOverlay" class="cart-overlay">
+  <div class="cart-dialog">
+    <h3 id="cartTitle">🛒 السلة</h3>
+    <div id="cartItems" class="cart-items"></div>
+    <div id="cartTotal" class="cart-total">
+      <span id="cartTotalLabel">الإجمالي</span>
+      <span>0₪</span>
+    </div>
+
+    <div style="margin-top:16px;font-weight:800;font-size:14px;">👤 נתוני הלקוח</div>
+    <input id="custName" class="cart-input" placeholder="الاسم الكامل">
+    <input id="custPhone" class="cart-input" placeholder="رقم الجوال">
+    <input id="custAddr" class="cart-input" placeholder="العنوان الكامل">
+
+    <div class="cart-actions">
+      <button id="orderBtn" class="btn-primary" onclick="sendToWhatsApp()">إرسال الطلب عبر واتساب</button>
+      <button id="closeBtn" class="btn-secondary" onclick="closeCart()">إغلاق</button>
+    </div>
   </div>
 </div>
 
+<!-- SUCCESS TOAST -->
+<div id="successMsg">
+  ✔️ تم إرسال الطلب بنجاح!
+</div>
+
 <script>
-let cart=[];
-function addToCart(name,price,qty){ if(qty<1)return; cart.push({name,price,qty}); renderCart(); }
-function renderCart(){ const box=document.getElementById('cartItems'); box.innerHTML=''; let total=0;
-  cart.forEach(i=>{ total+=i.price*i.qty; box.innerHTML+=`<div style='display:flex;justify-content:space-between;margin-bottom:10px;border-bottom:1px solid #444;padding-bottom:6px;'><span>${i.name} x ${i.qty}</span><span>${i.price*i.qty}₪</span></div>`; });
-  box.innerHTML+=`<div style='font-weight:800;display:flex;justify-content:space-between;margin-top:10px;'><span>المجموع</span><span>${total}₪</span></div>`;
-}
-document.getElementById('cartBtn').onclick=()=>document.getElementById('cartPanel').style.display='flex';
-document.getElementById('cartPanel').onclick=e=>{ if(e.target.id==='cartPanel')e.target.style.display='none'; };
 
-document.getElementById('checkoutBtn').onclick=()=>{
-  const lang=localStorage.getItem('menu-lang')||'he'; let msg='';
-  if(lang==='he') msg="שלום, אני רוצה להזמין:\n";
-  if(lang==='ar') msg="مرحبا، اريد طلب:\n";
-  if(lang==='en') msg="Hello, I want to order:\n";
-  if(lang==='ru') msg="Здравствуйте, я хочу заказать:\n";
-  let total=0;
-  cart.forEach(i=>{ msg+=`- ${i.name} x ${i.qty} = ${i.price*i.qty}₪\n`; total+=i.price*i.qty; });
-  if(lang==='he') msg+=`סה\"כ לתשלום: ${total}₪`;
-  if(lang==='ar') msg+=`المجموع الكلي: ${total}₪`;
-  if(lang==='en') msg+=`Total Amount: ${total}₪`;
-  if(lang==='ru') msg+=`Итоговая сумма: ${total}₪`;
-  
-const name=document.getElementById('custName').value;
-const phone=document.getElementById('custPhone').value;
-const addr=document.getElementById('custAddr').value;
-msg += `\nName: ${name}\nPhone: ${phone}\nAddress: ${addr}`;
+// ===== CART + ADD TO CART LOGIC (MULTI LANGUAGE) =====
 
-window.open("https://wa.me/972543325952?text="+encodeURIComponent(msg),"_blank");
+// 1) translations for cart + whatsapp
+const cartLang = {
+  ar: {
+    cart: "السلة",
+    total: "الإجمالي",
+    name: "الاسم الكامل",
+    phone: "رقم الجوال",
+    address: "العنوان",
+    empty: "السلة فارغة حالياً",
+    send: "إرسال الطلب عبر واتساب",
+    close: "إغلاق",
+    success: "✔️ تم إرسال الطلب بنجاح!",
+    wa_header: "🍽️ طلب جديد — مطعم راقي 🍽️",
+    wa_items: "📦 المنتجات المطلوبة:",
+    wa_total: "💳 الإجمالي:",
+    wa_customer: "👤 بيانات الزبون:",
+    wa_thanks: "شكراً لاختياركم مطعمنا الراقي ✨"
+  },
+  en: {
+    cart: "Cart",
+    total: "Total",
+    name: "Full Name",
+    phone: "Phone Number",
+    address: "Full Address",
+    empty: "Your cart is currently empty.",
+    send: "Send Order via WhatsApp",
+    close: "Close",
+    success: "✔️ Order sent successfully!",
+    wa_header: "🍽️ New Order — Luxury Restaurant 🍽️",
+    wa_items: "📦 Ordered Items:",
+    wa_total: "💳 Total:",
+    wa_customer: "👤 Customer details:",
+    wa_thanks: "Thank you for choosing our luxury restaurant ✨"
+  },
+  he: {
+    cart: "עגלה",
+    total: "סה\"כ",
+    name: "שם מלא",
+    phone: "טלפון",
+    address: "כתובת מלאה",
+    empty: "העגלה ריקה כרגע.",
+    send: "שליחת הזמנה בוואטסאפ",
+    close: "סגירה",
+    success: "✔️ ההזמנה נשלחה בהצלחה!",
+    wa_header: "🍽️ הזמנה חדשה — מסעדת יוקרה 🍽️",
+    wa_items: "📦 פריטים בהזמנה:",
+    wa_total: "💳 סה\"כ:",
+    wa_customer: "👤 פרטי לקוח:",
+    wa_thanks: "תודה שבחרתם במסעדת היוקרה שלנו ✨"
+  },
+  ru: {
+    cart: "Корзина",
+    total: "Итого",
+    name: "Полное имя",
+    phone: "Телефон",
+    address: "Полный адрес",
+    empty: "Корзина сейчас пуста.",
+    send: "Отправить заказ в WhatsApp",
+    close: "Закрыть",
+    success: "✔️ Заказ успешно отправлен!",
+    wa_header: "🍽️ Новый заказ — Элитный ресторан 🍽️",
+    wa_items: "📦 Заказанные позиции:",
+    wa_total: "💳 Итого:",
+    wa_customer: "👤 Данные клиента:",
+    wa_thanks: "Спасибо, что выбрали наш элитный ресторан ✨"
+  }
 };
-</script>
 
+function getCartLang(){
+  const lang = localStorage.getItem("menu-lang") || "ar";
+  return cartLang[lang] || cartLang["ar"];
+}
 
-<script>
+let cart = [];
+
+function openCart(){
+  applyCartLang();
+  document.getElementById('cartOverlay').classList.add('show');
+  renderCart();
+}
+
+function closeCart(){
+  document.getElementById('cartOverlay').classList.remove('show');
+}
+
+document.getElementById('cartBtn').addEventListener('click',openCart);
+document.getElementById('cartOverlay').addEventListener('click',e=>{
+  if(e.target.id==='cartOverlay') closeCart();
+});
+
 function updateQty(btn,delta){
-  const span=btn.parentElement.querySelector('.qty-val');
-  let v=parseInt(span.innerText)||1;
-  v=Math.max(1,v+delta);
-  span.innerText=v;
+  const span = btn.parentElement.querySelector('.qty-val');
+  let v = parseInt(span.innerText) || 1;
+  v = Math.max(1, v + delta);
+  span.innerText = v;
 }
+
 function addFromRow(btn,name,price){
-  const qty=parseInt(btn.parentElement.querySelector('.qty-val').innerText);
-  addToCart(name,parseFloat(price),qty);
+  const qtySpan = btn.parentElement.querySelector('.qty-controls .qty-val');
+  const qty = parseInt(qtySpan.innerText) || 1;
+  addToCart(name, price, qty);
+}
+
+function addToCart(name, price, qty){
+  if(qty < 1) return;
+  const priceNum = parseFloat(String(price).replace(/[^0-9.]/g,''));
+  let item = cart.find(i => i.name === name);
+  if(item){ item.qty += qty; }
+  else{ cart.push({name, price: priceNum, qty}); }
+  renderCart();
+}
+
+function changeQty(index, delta){
+  const item = cart[index];
+  if(!item) return;
+  item.qty += delta;
+  if(item.qty <= 0) cart.splice(index,1);
+  renderCart();
+}
+
+function renderCart(){
+  const t = getCartLang();
+  const box = document.getElementById('cartItems');
+  const totalEl = document.getElementById('cartTotal').querySelector('span:last-child');
+  box.innerHTML = '';
+  let total = 0;
+
+  if(cart.length === 0){
+    box.innerHTML = `<div class="muted">${t.empty}</div>`;
+  } else {
+    cart.forEach((item,i)=>{
+      total += item.price * item.qty;
+      box.innerHTML += `
+        <div class="cart-row">
+          <div class="cart-row-main">
+            <div>${item.name}</div>
+            <div class="cart-row-qty">
+              <button class="qty-btn" onclick="changeQty(${i},-1)">-</button>
+              <span class="qty-val">${item.qty}</span>
+              <button class="qty-btn" onclick="changeQty(${i},1)">+</button>
+            </div>
+          </div>
+          <div>${item.price*item.qty}₪</div>
+        </div>`;
+    });
+  }
+  totalEl.textContent = total + '₪';
+}
+
+// apply language to cart UI
+function applyCartLang(){
+  const t = getCartLang();
+
+  const title = document.getElementById("cartTitle");
+  if(title) title.textContent = "🛒 " + t.cart;
+
+  const totalLabel = document.getElementById("cartTotalLabel");
+  if(totalLabel) totalLabel.textContent = t.total;
+
+  const nameInput = document.getElementById("custName");
+  const phoneInput = document.getElementById("custPhone");
+  const addrInput = document.getElementById("custAddr");
+
+  if(nameInput) nameInput.placeholder = t.name;
+  if(phoneInput) phoneInput.placeholder = t.phone;
+  if(addrInput) addrInput.placeholder = t.address;
+
+  const orderBtn = document.getElementById("orderBtn");
+  if(orderBtn) orderBtn.textContent = t.send;
+
+  const closeBtn = document.getElementById("closeBtn");
+  if(closeBtn) closeBtn.textContent = t.close;
+
+  const cartPanel = document.getElementById("cartOverlay");
+  const lang = localStorage.getItem("menu-lang") || "ar";
+  if(cartPanel){
+    cartPanel.style.direction = (lang === "ar" || lang === "he") ? "rtl" : "ltr";
+  }
+}
+
+function showSuccess(){
+  const t = getCartLang();
+  const box = document.getElementById('successMsg');
+  if(box){
+    box.textContent = t.success;
+    box.style.opacity = 1;
+    box.style.transform = 'translateX(-50%) translateY(15px)';
+    setTimeout(()=>{
+      box.style.opacity = 0;
+      box.style.transform = 'translateX(-50%) translateY(-30px)';
+    },3000);
+  }
+}
+
+function sendToWhatsApp(){
+  if(cart.length === 0){
+    alert('Cart is empty.');
+    return;
+  }
+
+  const lang = localStorage.getItem("menu-lang") || "ar";
+  const t = getCartLang();
+  const name = document.getElementById('custName').value.trim();
+  const phone = document.getElementById('custPhone').value.trim();
+  const addr = document.getElementById('custAddr').value.trim();
+
+  if(!name || !phone || !addr){
+    alert('Please fill all customer details.');
+    return;
+  }
+
+  const total = cart.reduce((s,i)=>s + i.price*i.qty, 0);
+
+  let msg = "";
+
+  if(lang === "ar"){
+    msg += "🌟✨ ━━━━━━━━━━━━━━━ ✨🌟\n";
+    msg += "        🍽️ طلب ذهبي فاخر 🍽️\n";
+    msg += "🌟✨ ━━━━━━━━━━━━━━━ ✨🌟\n\n";
+    msg += "📦 المنتجات المطلوبة:\n";
+    cart.forEach(i=>{
+      msg += `• 🍴 ${i.name} ×${i.qty} — ${i.price*i.qty}₪\n`;
+    });
+    msg += "\n💳 الإجمالي النهائي:\n";
+    msg += total + " ₪\n\n";
+    msg += "👤 بيانات العميل:\n";
+    msg += `• الاسم: ${name}\n`;
+    msg += `• الجوال: ${phone}\n`;
+    msg += `• العنوان: ${addr}\n\n`;
+    msg += "🌟✨ شكراً لطلبكم من مطعمنا الفاخر ✨🌟";
+  } else if(lang === "en"){
+    msg += "✨👑 ━━━━━━━━━━━━━━━ 👑✨\n";
+    msg += "     🍽️ Premium Royal Order 🍽️\n";
+    msg += "✨👑 ━━━━━━━━━━━━━━━ 👑✨\n\n";
+    msg += "📦 Ordered Items:\n";
+    cart.forEach(i=>{
+      msg += `• ⭐ ${i.name} ×${i.qty} — ${i.price*i.qty}₪\n`;
+    });
+    msg += "\n💰 Total Amount:\n";
+    msg += total + " ₪\n\n";
+    msg += "👤 Customer Details:\n";
+    msg += `• Name: ${name}\n`;
+    msg += `• Phone: ${phone}\n`;
+    msg += `• Address: ${addr}\n\n`;
+    msg += "✨👑 Thank you for choosing our fine dining restaurant 👑✨";
+  } else if(lang === "he"){
+    msg += "🌟✨ ━━━━━━━━━━━━━━━ ✨🌟\n";
+    msg += "     🍽️ הזמנה יוקרתית 🍽️\n";
+    msg += "🌟✨ ━━━━━━━━━━━━━━━ ✨🌟\n\n";
+    msg += "📦 פריטים:\n";
+    cart.forEach(i=>{
+      msg += `• ✨ ${i.name} ×${i.qty} — ${i.price*i.qty}₪\n`;
+    });
+    msg += "\n💳 סה״כ:\n";
+    msg += total + " ₪\n\n";
+    msg += "👤 פרטי לקוח:\n";
+    msg += `• שם: ${name}\n`;
+    msg += `• טלפון: ${phone}\n`;
+    msg += `• כתובת: ${addr}\n\n`;
+    msg += "🌟✨ תודה שבחרתם במסעדת היוקרה שלנו ✨🌟";
+  } else { // ru or any other
+    msg += "✨💎 ━━━━━━━━━━━━━━━ 💎✨\n";
+    msg += "     🍽️ Премиум заказ 🍽️\n";
+    msg += "✨💎 ━━━━━━━━━━━━━━━ 💎✨\n\n";
+    msg += "📦 Позиции заказа:\n";
+    cart.forEach(i=>{
+      msg += `• ⭐ ${i.name} ×${i.qty} — ${i.price*i.qty}₪\n`;
+    });
+    msg += "\n💰 Итоговая сумма:\n";
+    msg += total + " ₪\n\n";
+    msg += "👤 Данные клиента:\n";
+    msg += `• Имя: ${name}\n`;
+    msg += `• Телефон: ${phone}\n`;
+    msg += `• Адрес: ${addr}\n\n`;
+    msg += "✨💎 Спасибо, что выбрали наш элитный ресторан 💎✨";
+  }
+
+  const encoded = encodeURIComponent(msg);
+  // رقم الواتساب المطلوب: +972 54-332-5952
+  window.open(`https://wa.me/972543325952?text=${encoded}`,'_blank');
+
+  showSuccess();
+  closeCart();
 }
 </script>
+
+
 </body>
 </html>
