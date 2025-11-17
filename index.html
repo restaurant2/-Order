@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>חומוס גרגירים — תפריט</title>
+  <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;600;800&family=Tajawal:wght@400;700;800&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    :root{--bg:#0f1115;--card:#181b22;--muted:#99a1b3;--accent:#00b7ff;--accent-2:#ff8a00;--text:#e7ecf3;--shadow:0 20px 50px rgba(0,0,0,.45);--radius:22px;}
+    *{box-sizing:border-box} body{margin:0;background:radial-gradient(1200px 600px at 20% -10%,rgba(0,183,255,.14),transparent 50%),radial-gradient(1000px 700px at 80% 110%,rgba(255,138,0,.10),transparent 60%),var(--bg);color:var(--text);font-family:Heebo,Tajawal,Inter,sans-serif;line-height:1.6;}
+    header{position:sticky;top:0;background:rgba(15,17,21,.8);backdrop-filter:blur(12px);border-bottom:1px solid rgba(255,255,255,.1);z-index:50;}
+    .container{max-width:1100px;margin:auto;padding:28px 16px 120px}
+    .bar{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:14px 6px;}
+    .title{font-weight:900;font-size:clamp(20px,3vw,36px);color:#fff}
+    .pill{display:inline-flex;align-items:center;gap:8px;padding:10px 16px;border-radius:999px;background:#00b7ff;color:#001018;font-weight:800;text-decoration:none;box-shadow:var(--shadow);border:none;cursor:pointer;}
+    .pill:hover{transform:translateY(-1px)} .pill.lang{background:transparent;border:2px solid var(--accent-2);color:var(--text)}
+    .grid{display:grid;grid-template-columns:repeat(12,1fr);gap:18px;margin-top:28px}
+    .card{grid-column:span 12;padding:20px;border-radius:var(--radius);background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);box-shadow:var(--shadow);}
+    @media(min-width:900px){.card{grid-column:span 6}}
+    .section-title{font-weight:800;font-size:20px;margin-bottom:10px;}
+    .menu{display:flex;flex-direction:column;gap:8px}
+    .row{display:grid;grid-template-columns:1fr auto;gap:12px;padding:10px 14px;border-radius:14px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);}
+    .name{font-weight:700} .price{background:rgba(0,183,255,.16);border:1px solid rgba(0,183,255,.35);border-radius:10px;padding:4px 10px;font-weight:800}
+    .muted{color:var(--muted);font-size:14px}
+    .overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);display:none;align-items:center;justify-content:center;z-index:80}
+    .overlay.show{display:flex}
+    .dialog{background:var(--card);padding:16px;border-radius:20px;box-shadow:var(--shadow);width:min(600px,90vw)}
+    .langs{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    .btn-lang{padding:12px;border:2px solid var(--accent-2);border-radius:14px;background:transparent;color:#fff;font-weight:800;cursor:pointer;}
+    .hours{display:grid;grid-template-columns:1fr 1fr;gap:4px 40px;margin-top:20px}
+  </style>
+</head>
+<body>
+<header>
+  <div class="container bar">
+    <div class="title">חומוס גרגירים</div>
+    <div style="display:flex;gap:10px;">
+      <a class="pill" href="https://maps.app.goo.gl/tNyCG6kLzahix4iu8" target="_blank">פתיחת המיקום במפה</a>
+      <button class="pill lang" id="btnLang">🌐</button>
+    </div>
+  </div>
+</header>
+
+<main class="container">
+  <div class="grid">
+    <section class="card"><div class="section-title" id="sec-plates">🍽️ בצלחות</div><div class="menu" id="menu-plates"></div></section>
+    <section class="card"><div class="section-title" id="sec-business">🍱 עסקית</div><div class="menu" id="menu-business"></div></section>
+    <section class="card"><div class="section-title" id="sec-pita">🥙 פיתה</div><div class="menu" id="menu-pita"></div></section>
+    <section class="card"><div class="section-title" id="sec-baguette">🥖 בגט</div><div class="menu" id="menu-baguette"></div></section>
+    <section class="card"><div class="section-title" id="sec-sides">🍟 תוספות</div><div class="menu" id="menu-sides"></div></section>
+    <section class="card"><div class="section-title" id="sec-drinks">🥤 שתייה</div><div class="menu" id="menu-drinks"></div></section>
+    <section class="card" style="grid-column:span 12">
+      <div class="section-title">📍 מי אנחנו והמיקום</div>
+      <p class="muted">📍 לוקיישן: אלנבי 47 ת״א<br>פתחו אותנו במפה דרך הכפתור למטה.</p>
+      <a class="pill" href="https://wolt.com/he/isr/tel-aviv/restaurant/hummus-gargerim" target="_blank">Wolt</a>
+      <div class="section-title" style="margin-top:30px;">🕒 שעות פעילות</div>
+      <div class="hours">
+        <div>ראשון</div><div>01:00–10:00</div>
+        <div>שני</div><div>01:00–10:00</div>
+        <div>שלישי</div><div>01:00–10:00</div>
+        <div>רביעי</div><div>01:00–10:00</div>
+        <div>חמישי</div><div>01:00–10:00</div>
+        <div>שישי</div><div>01:00–10:00</div>
+        <div>שבת</div><div>01:00–10:00</div>
+      </div>
+    </section>
+  </div>
+</main>
+
+<div class="overlay" id="overlay">
+  <div class="dialog">
+    <div class="muted" style="font-weight:800;margin-bottom:10px;">בחרו שפה / اختر لغة / Выберите язык / Choose language</div>
+    <div class="langs">
+      <button class="btn-lang" data-lang="he">עברית 🇮🇱</button>
+      <button class="btn-lang" data-lang="ar">العربية 🇸🇦</button>
+      <button class="btn-lang" data-lang="ru">Русский 🇷🇺</button>
+      <button class="btn-lang" data-lang="en">English 🇬🇧</button>
+    </div>
+  </div>
+</div>
+
+<script>const addBtnText={he:'הוספה לעגלה',ar:'إضافة للسلة',en:'Add to Cart',ru:'Добавить в корзину'};
+
+const menuData={
+  he:{
+    plates:[["חומוס גרגרים","30₪"],["חומוס פול","30₪"],["משולש (חומוס+פול+מסבחה)","30₪"],["מסבחה","30₪"],["חומוס פטריות","36₪"],["חומוס בשר","48₪"],["שקשוקה (כולל 2 ביצים)","43₪"],["חביתה (כולל חומוס)","34₪"],["קבב","60₪"],["חזה עוף","55₪"],["צלחת חומוס סביח עם ביצה","38₪"],["סלט בריאות עם גרגירי חומוס וביצה וטחינה בצד","35₪"]],
+    business:[["צלחת חומוס עם ציפס פלאפל וקולה","45₪ | עד שעה חמש"]],
+    pita:[["פלאפל","20₪"],["שקשוקה","25₪"],["חביתה","25₪"],["מסבחה","20₪"],["פול","20₪"],["חומוס","20₪"],["פיתה סביח","26₪"],["שניצל","30₪"],["קבב","35₪"],["פיתה חריפות","30₪"],["פיתה חזה עוף","30₪"]],
+    baguette:[["בגט חריפות מרגז","40₪"],["בגט שניצל","40₪"],["בגט מעורב","40₪"],["בגט קבב","45₪"],["בגט חזה עוף","40₪"],["בגט פרגית","40₪"]],
+    sides:[["ציפס קטן","20₪"],["ציפס גדול","28₪"],["סלט ירקות","20₪"],["ביצה","4₪"],["כדורי פלאפל (5 יחידות)","10₪"]],
+    drinks:[["שתייה קלה","10₪ / 12₪"]]
+  },
+  ar:{
+    plates:[["حمص غارغيريم","30₪"],["حمص فول","30₪"],["مشكل (حمص + فول + مسبحة)","30₪"],["مسبحة","30₪"],["حمص بفطر","36₪"],["حمص باللحم","48₪"],["شكشوكة (بيضان)","43₪"],["عجة مع حمص","34₪"],["كباب","60₪"],["صدر دجاج","55₪"],["طبق حمص صباح مع بيضة","38₪"],["سلطة صحية بحمص وبيضة وطحينة","35₪"]],
+    business:[["طبق حمص مع بطاطا وفلافل وكولا","45₪ | حتى الساعة الخامسة"]],
+    pita:[["فلافل","20₪"],["شكشوكة","25₪"],["عجة","25₪"],["مسبحة","20₪"],["فول","20₪"],["حمص","20₪"],["بيتا صباح","26₪"],["شنيتسل","30₪"],["كباب","35₪"],["بيتا حارة","30₪"],["بيتا صدر دجاج","30₪"]],
+    baguette:[["باغيت حار بالميرغز","40₪"],["باغيت شنيتسل","40₪"],["باغيت مشكل","40₪"],["باغيت كباب","45₪"],["باغيت صدر دجاج","40₪"],["باغيت فخذ دجاج","40₪"]],
+    sides:[["بطاطا صغيرة","20₪"],["بطاطا كبيرة","28₪"],["سلطة خضار","20₪"],["بيضة","4₪"],["كرات فلافل (5 قطع)","10₪"]],
+    drinks:[["مشروبات غازية","10₪ / 12₪"]]
+  },
+  en:{
+    plates:[["Hummus With Chikpeas","30₪"],["Hummus Ful","30₪"],["Mix (Hummus+Ful+Msabakha)","30₪"],["Msabakha","30₪"],["Hummus with Mushrooms","36₪"],["Hummus with Meat","48₪"],["Shakshuka (2 Eggs)","43₪"],["Omelet(includes: hummus & salad)","34₪"],["Kabab (include: hummus & salad )","60₪"],["Chicken Breast(includes: hummus & salad)","55₪"],["Hummus Sabich Plate with Egg","38₪"],["Healthy Salad with Chickpeas, Egg & Tahini","35₪"]],
+    business:[["Hummus Plate with Fries, Falafel & Cola","45₪ | Until 5PM"]],
+    pita:[["Falafel","20₪"],["Shakshuka","25₪"],["Omelet","25₪"],["Msabakha","20₪"],["Ful","20₪"],["Hummus","20₪"],["Sabich Pita","26₪"],["Schnitzel","30₪"],["Kebab","35₪"],["Spicy Merguez Pita","30₪"],["Chicken Breast Pita","30₪"]],
+    baguette:[["Spicy Merguez Baguette","40₪"],["Schnitzel Baguette","40₪"],["Jerusalem Mix Baguette","40₪"],["Kebab Baguette","45₪"],["Chicken Breast Baguette","40₪"],["Spring chicken Baguette","40₪"]],
+    sides:[["Small Fries","20₪"],["Large Fries","28₪"],["Israeli Salad","20₪"],["Egg","4₪"],["Falafel Balls (5 pcs)","10₪"]],
+    drinks:[["Soft Drinks","10₪ / 12₪"]]
+  },
+  ru:{
+    plates:[["Хумус Гаргерим","30₪"],["Хумус с бобами","30₪"],["Микс (Хумус+Бобы+Масабаха)","30₪"],["Масабаха","30₪"],["Хумус с грибами","36₪"],["Хумус с мясом","48₪"],["Шакшука (2 яйца)","43₪"],["Омлет с хумусом","34₪"],["Кебаб","60₪"],["Куриная грудка","55₪"],["Тарелка Сабих с яйцом","38₪"],["Салат с хумусом, яйцом и тахини","35₪"]],
+    business:[["Тарелка хумуса с картошкой, фалафелем и колой","45₪ | до 17:00"]],
+    pita:[["Фалафель","20₪"],["Шакшука","25₪"],["Омлет","25₪"],["Масабаха","20₪"],["Бобы","20₪"],["Хумус","20₪"],["Пита Сабих","26₪"],["Шницель","30₪"],["Кебаб","35₪"],["Острая пита","30₪"],["Пита с курицей","30₪"]],
+    baguette:[["Острый багет с мергезом","40₪"],["Багет шницель","40₪"],["Смешанный багет","40₪"],["Багет кебаб","45₪"],["Багет с куриной грудкой","40₪"],["Багет паргит","40₪"]],
+    sides:[["Маленькая картошка фри","20₪"],["Большая картошка фри","28₪"],["Овощной салат","20₪"],["Яйцо","4₪"],["Фалафель (5 шт)","10₪"]],
+    drinks:[["Напитки","10₪ / 12₪"]]
+  }
+};
+
+const overlay=document.getElementById('overlay');
+const renderMenu=(id,items)=>{
+  const lang=localStorage.getItem('menu-lang')||'he';
+  const el=document.getElementById(id);
+  el.innerHTML='';
+  items.forEach(([n,p])=>{el.innerHTML+=`<div class='row'><div class='name'>${n}</div><div class='price'>${p}</div><div class='qty-controls' style='display:flex;gap:10px;align-items:center;margin-top:6px;'><button class='qty-btn' onclick='updateQty(this,-1)'>➖</button><span class='qty-val'>1</span><button class='qty-btn' onclick='updateQty(this,1)'>➕</button></div><button class='add-btn' onclick='addFromRow(this,"${n}","${p}")'>${addBtnText[lang]}</button></div>`});
+};
+const renderAll=(lang)=>{["plates","business","pita","baguette","sides","drinks"].forEach(s=>renderMenu(`menu-${s}`,menuData[lang][s]));};
+document.getElementById('btnLang').addEventListener('click',()=>overlay.classList.add('show'));
+overlay.addEventListener('click',e=>{if(e.target.id==='overlay')overlay.classList.remove('show');});
+document.querySelectorAll('.btn-lang').forEach(btn=>btn.addEventListener('click',()=>{const code=btn.getAttribute('data-lang');localStorage.setItem('menu-lang',code);renderAll(code);overlay.classList.remove('show');}));
+const saved=localStorage.getItem('menu-lang')||'he';renderAll(saved);
+</script>
+
+<!-- CART FLOATING BUTTON -->
+<button id="cartBtn" style="position:fixed;top:20px;left:20px;background:#ff8a00;color:#fff;padding:12px 16px;border-radius:16px;font-weight:800;cursor:pointer;z-index:999;">🛒 السلة</button>
+
+<!-- CART PANEL -->
+<div id="cartPanel" style="position:fixed;inset:0;background:rgba(0,0,0,.55);display:none;align-items:center;justify-content:center;z-index:1000;">
+  <div id="cartBox" style="background:#181b22;padding:20px;border-radius:20px;box-shadow:0 20px 50px rgba(0,0,0,.45);width:min(500px,90vw);color:white;">
+    <h3>🛒 السلة</h3>
+    <div id="cartItems"></div>
+<div id="customerInfo" style="margin-top:15px;display:flex;flex-direction:column;gap:10px;">
+  <input id="custName" placeholder="Name" style="padding:10px;border:2px solid #ff8a00;border-radius:10px;background:#0f1115;color:#fff;">
+  <input id="custPhone" placeholder="Phone" style="padding:10px;border:2px solid #ff8a00;border-radius:10px;background:#0f1115;color:#fff;">
+  <input id="custAddr" placeholder="Address" style="padding:10px;border:2px solid #ff8a00;border-radius:10px;background:#0f1115;color:#fff;">
+</div>
+
+    <div id="checkoutBtn" style="margin-top:20px;background:#00b7ff;color:#001018;padding:12px 16px;border-radius:14px;font-weight:800;text-align:center;cursor:pointer;">اتمام الطلب</div>
+  </div>
+</div>
+
+<script>
+let cart=[];
+function addToCart(name,price,qty){ if(qty<1)return; cart.push({name,price,qty}); renderCart(); }
+function renderCart(){ const box=document.getElementById('cartItems'); box.innerHTML=''; let total=0;
+  cart.forEach(i=>{ total+=i.price*i.qty; box.innerHTML+=`<div style='display:flex;justify-content:space-between;margin-bottom:10px;border-bottom:1px solid #444;padding-bottom:6px;'><span>${i.name} x ${i.qty}</span><span>${i.price*i.qty}₪</span></div>`; });
+  box.innerHTML+=`<div style='font-weight:800;display:flex;justify-content:space-between;margin-top:10px;'><span>المجموع</span><span>${total}₪</span></div>`;
+}
+document.getElementById('cartBtn').onclick=()=>document.getElementById('cartPanel').style.display='flex';
+document.getElementById('cartPanel').onclick=e=>{ if(e.target.id==='cartPanel')e.target.style.display='none'; };
+
+document.getElementById('checkoutBtn').onclick=()=>{
+  const lang=localStorage.getItem('menu-lang')||'he'; let msg='';
+  if(lang==='he') msg="שלום, אני רוצה להזמין:\n";
+  if(lang==='ar') msg="مرحبا، اريد طلب:\n";
+  if(lang==='en') msg="Hello, I want to order:\n";
+  if(lang==='ru') msg="Здравствуйте, я хочу заказать:\n";
+  let total=0;
+  cart.forEach(i=>{ msg+=`- ${i.name} x ${i.qty} = ${i.price*i.qty}₪\n`; total+=i.price*i.qty; });
+  if(lang==='he') msg+=`סה\"כ לתשלום: ${total}₪`;
+  if(lang==='ar') msg+=`المجموع الكلي: ${total}₪`;
+  if(lang==='en') msg+=`Total Amount: ${total}₪`;
+  if(lang==='ru') msg+=`Итоговая сумма: ${total}₪`;
+  
+const name=document.getElementById('custName').value;
+const phone=document.getElementById('custPhone').value;
+const addr=document.getElementById('custAddr').value;
+msg += `\nName: ${name}\nPhone: ${phone}\nAddress: ${addr}`;
+
+window.open("https://wa.me/972543325952?text="+encodeURIComponent(msg),"_blank");
+};
+</script>
+
+
+<script>
+function updateQty(btn,delta){
+  const span=btn.parentElement.querySelector('.qty-val');
+  let v=parseInt(span.innerText)||1;
+  v=Math.max(1,v+delta);
+  span.innerText=v;
+}
+function addFromRow(btn,name,price){
+  const qty=parseInt(btn.parentElement.querySelector('.qty-val').innerText);
+  addToCart(name,parseFloat(price),qty);
+}
+</script>
+</body>
+</html>
