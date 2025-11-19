@@ -290,11 +290,13 @@ const menuData={
 
 const overlay=document.getElementById('overlay');
 
+const platesAddonsList = `<label class='addon-item'><input type='checkbox' value='פפריקה'> פפריקה</label><label class='addon-item'><input type='checkbox' value='כמון'> כמון</label><label class='addon-item'><input type='checkbox' value='שמן זית'> שמן זית</label><label class='addon-item'><input type='checkbox' value='פטרוזיליה'> פטרוזיליה</label><label class='addon-item'><input type='checkbox' value='ביצה(+4)'> תוספת ביצה +4₪</label>`;
+const platesNoAddons = ["קבב","חזה עוף","צלחת חומוס סביח עם ביצה","סלט בריאות עם גרגירי חומוס וביצה וטחינה בצד"];
 const addonsList = `<label class='addon-item'><input type='checkbox' value='חומוס'> חומוס</label><label class='addon-item'><input type='checkbox' value='טחינה'> טחינה</label><label class='addon-item'><input type='checkbox' value='חריף'> חריף</label><label class='addon-item'><input type='checkbox' value='סלט'> סלט</label><label class='addon-item'><input type='checkbox' value='כרוב אדום'> כרוב אדום</label><label class='addon-item'><input type='checkbox' value='כרוב לבן'> כרוב לבן</label><label class='addon-item'><input type='checkbox' value='כרוב מיונז'> כרוב מיונז</label><label class='addon-item'><input type='checkbox' value='פטרוזליה'> פטרוזליה</label><label class='addon-item'><input type='checkbox' value='שום לימון'> שום לימון</label>`; const renderMenu=(id,items)=>{
   const lang = localStorage.getItem('menu-lang')||'he';
   const el = document.getElementById(id);
   el.innerHTML = '';
-  const hasAddons = (id === 'menu-pita' || id === 'menu-baguette');
+  const hasAddons = (id === 'menu-pita' || id === 'menu-baguette' || id === 'menu-plates');
 
   items.forEach(([n,p])=>{
     const addonsHTML = hasAddons
@@ -304,7 +306,7 @@ const addonsList = `<label class='addon-item'><input type='checkbox' value='חו
     el.innerHTML += `
       <div class='row'>
         <div class='name'>${n}</div>
-        <div class='price'>${p}</div>${hasAddons ? `<div class='addons-box'>${addonsList}</div>` : ``}
+        <div class='price'>${p}</div>${(hasAddons && !(id==='menu-plates' && platesNoAddons.includes(n))) ? `<div class='addons-box'>${id==='menu-plates'?platesAddonsList:addonsList}</div>` : ``}
         ${addonsHTML}
         <div class='qty-controls' style='display:flex;gap:10px;align-items:center;margin-top:6px;'>
           <button class='qty-btn' onclick='updateQty(this,-1)'>➖</button>
@@ -469,9 +471,10 @@ function addFromRow(btn,name,price){
 function addToCart(name, price, qty, addons){
   if(qty < 1) return;
   const priceNum = parseFloat(String(price).replace(/[^0-9.]/g,''));
+    let extra = (addons && addons.includes('ביצה(+4)')) ? 4 * qty : 0;
   let item = cart.find(i => i.name === name);
   if(item){ item.qty += qty; }
-  else{ cart.push({name, price: priceNum, qty, addons: addons || []}); }
+  else{ cart.push({name, price: priceNum + extra, qty, addons: addons || []}); }
   renderCart(); updateCartBadge(); updateCartBadge();
 }
 
