@@ -686,5 +686,61 @@ function sendToWhatsApp(){
 </script>
 
 
+
+<!-- Drink Popup -->
+<div id="drinkPopup" class="cart-overlay">
+  <div class="cart-dialog" style="max-width:400px;">
+    <h3 id="drinkTitle">בחר משקה</h3>
+    <div id="drinkOptions" style="display:flex;flex-direction:column;gap:10px;"></div>
+    <button onclick="closeDrinkPopup()" class="btn-secondary" style="margin-top:15px;">إغلاق</button>
+  </div>
+</div>
+
+<script>
+let pendingDrink=null;
+
+function openDrinkPopup(options, baseName){
+  pendingDrink=baseName;
+  const box=document.getElementById('drinkOptions');
+  box.innerHTML='';
+  options.forEach(opt=>{
+    const btn=document.createElement('button');
+    btn.className='btn-primary';
+    btn.textContent=opt.name + ' - ' + opt.price + '₪';
+    btn.onclick=()=>{ addToCart(opt.name, opt.price+'₪', 1, []); closeDrinkPopup(); };
+    box.appendChild(btn);
+  });
+  document.getElementById('drinkPopup').classList.add('show');
+}
+
+function closeDrinkPopup(){
+  document.getElementById('drinkPopup').classList.remove('show');
+}
+
+const drinkGroups={
+  "גזז":[
+    {name:"סודה",price:12},
+    {name:"שוופס תפוח",price:12},
+    {name:"שוופס ענבים",price:12}
+  ],
+  "בחית":[
+    {name:"קולה",price:10},
+    {name:"קולה זירו",price:10},
+    {name:"מים מינרלים",price:10},
+    {name:"מים בטעמים",price:10},
+    {name:"נסטי",price:10}
+  ]
+};
+
+const origAddFromRow=addFromRow;
+addFromRow=function(btn,name,price){
+  if(drinkGroups[name]){
+    openDrinkPopup(drinkGroups[name], name);
+  }else{
+    origAddFromRow(btn,name,price);
+  }
+};
+</script>
+
 </body>
 </html>
