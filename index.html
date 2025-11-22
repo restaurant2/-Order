@@ -308,7 +308,9 @@ const addonsList = `
 <label class='addon-item'><input type='checkbox' value='אלף האיים'> אלף האיים</label>
 `;
 const pitaSpecialAddons = ``;
-const pitaExtraAddons = ``; const renderMenu=(id,items)=>{
+const pitaExtraAddons = `
+<label class='addon-item'><input type='checkbox' value='ביצה(+4)'> תוספת ביצה +4₪</label>
+`; const renderMenu=(id,items)=>{
   const lang = localStorage.getItem('menu-lang')||'he';
   const el = document.getElementById(id);
   el.innerHTML = '';
